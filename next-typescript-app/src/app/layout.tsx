@@ -35,9 +35,9 @@ const navItems = [
 
 function AppSidebar() {
   return (
-    <div className="py-4">
+    <div className="py-4 px-2">
       <nav>
-        <ul>
+        <ul className="space-y-1">
           {navItems.map((item) => (
             <li className="">
               <Link
