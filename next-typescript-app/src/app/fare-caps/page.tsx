@@ -22,8 +22,11 @@ const sampleData = [
 export default function FareCapsPage() {
   return (
     <div className="mt-4 p-4 mx-auto max-w-screen-lg">
-      <div className="pb-2 flex justify-end">
-        <Button>Add Fare Caps</Button>
+      <div className="pb-2 flex justify-between">
+        <div>
+          <h2 className="text-lg font-semibold">Fare Caps</h2>
+        </div>
+        <Button>Add Fare Cap</Button>
       </div>
       <div>
         <DataTable columns={columns} data={sampleData} />

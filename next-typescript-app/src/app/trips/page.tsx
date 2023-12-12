@@ -22,12 +22,15 @@ const sampleData = [
 export default function TripsPage() {
   return (
     <div className="mt-4 p-4 mx-auto max-w-screen-lg">
-      <div className="pb-2 flex justify-end">
+      <div className="pb-2 flex justify-between">
+        <div>
+          <h2 className="text-lg font-semibold">Trips</h2>
+        </div>
         <Button>Add Trip</Button>
       </div>
       <div>
         <DataTable columns={columns} data={sampleData} />
       </div>
     </div>
-  )
+  )g
 }
