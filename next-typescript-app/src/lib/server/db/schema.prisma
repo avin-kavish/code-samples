@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Fare {
+  id          Int     @id
+  from        String
+  to          String
+  peakFare    Decimal
+  offpeakFare Decimal
+}
+
+model FareCap {
+  id        Int     @id
+  from      String
+  to        String
+  dailyCap  Decimal
+  weeklyCap Decimal
+}
+
+enum DayOfWeek {
+  weekday
+  saturday
+  sunday
+}
+
+model PeakHour {
+  day   DayOfWeek @unique
+  start String
+  end   String
+}
+
+model Customer {
+  id   Int    @id
+  name String
+  trips Trip[]
+}
+
+model Trip {
+  id         BigInt   @id
+  date       DateTime
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+  from       String
+  to         String
+}

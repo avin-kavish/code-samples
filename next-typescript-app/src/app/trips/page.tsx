@@ -32,5 +32,5 @@ export default function TripsPage() {
         <DataTable columns={columns} data={sampleData} />
       </div>
     </div>
-  )g
+  )
 }
