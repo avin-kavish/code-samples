@@ -8,15 +8,15 @@ datasource db {
 }
 
 model Fare {
-  id          Int     @id
+  id          BigInt     @id @default(autoincrement())
   from        String
   to          String
   peakFare    Decimal
-  offpeakFare Decimal
+  offPeakFare Decimal
 }
 
 model FareCap {
-  id        Int     @id
+  id        BigInt     @id @default(autoincrement())
   from      String
   to        String
   dailyCap  Decimal
@@ -36,16 +36,16 @@ model PeakHour {
 }
 
 model Customer {
-  id   Int    @id
+  id   BigInt    @id @default(autoincrement())
   name String
   trips Trip[]
 }
 
 model Trip {
-  id         BigInt   @id
+  id         BigInt   @id  @default(autoincrement())
   date       DateTime
   customer   Customer @relation(fields: [customerId], references: [id])
-  customerId Int
+  customerId BigInt
   from       String
   to         String
 }
