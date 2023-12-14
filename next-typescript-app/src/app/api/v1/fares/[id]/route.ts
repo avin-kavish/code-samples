@@ -1,10 +1,10 @@
-/**
- * Get single fare
- * @constructor
- */
-export default function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const id = searchParams.get("id")
-}
+import { withValidatedBody } from "@/lib/utils"
+import { FareCreateSchema, updateFare } from "@/lib/server/db/fares"
 
-export const dynamic = "force-dynamic"
+export const POST = withValidatedBody(
+  FareCreateSchema,
+  async (body, request, params: { id: string }) => {
+    const fare = await updateFare(+params.id, body)
+    return Response.json(fare)
+  },
+)
