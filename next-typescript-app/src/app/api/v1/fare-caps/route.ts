@@ -3,17 +3,16 @@ import {
   FareCapsCreateSchema,
   listFareCaps,
 } from "@/lib/server/db/fare-caps"
-import { withValidatedBody } from "@/lib/utils"
+import { jsonResponse, withValidatedBody } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
 /**
  * Get list of fare caps
- * @constructor
  */
 export const GET = async (request: Request) => {
   const fareCaps = await listFareCaps()
-  return Response.json(fareCaps)
+  return jsonResponse(fareCaps)
 }
 
 /**
@@ -21,5 +20,5 @@ export const GET = async (request: Request) => {
  */
 export const POST = withValidatedBody(FareCapsCreateSchema, async body => {
   const fareCap = await createFareCap(body)
-  return Response.json(fareCap)
+  return jsonResponse(fareCap)
 })

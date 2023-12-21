@@ -17,3 +17,11 @@ export type FareCapsCreateSchema = z.infer<typeof FareCapsCreateSchema>
 export function createFareCap(data: FareCapsCreateSchema) {
   return prisma.fareCap.create({ data })
 }
+
+export function updateFareCap(id: number, data: FareCapsCreateSchema) {
+  return prisma.fareCap.update({ where: { id }, data })
+}
+
+export function deleteFareCap(id: number) {
+  return prisma.fareCap.delete({ where: { id } })
+}
