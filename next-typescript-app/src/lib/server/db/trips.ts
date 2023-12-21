@@ -16,3 +16,7 @@ export type TripCreateSchema = z.infer<typeof TripCreateSchema>
 export function createTrip(data: TripCreateSchema) {
   return prisma.trip.create({ data })
 }
+
+export function deleteTrip(id: number) {
+  return prisma.trip.delete({ where: { id } })
+}
