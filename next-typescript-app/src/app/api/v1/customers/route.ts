@@ -3,7 +3,7 @@ import {
   CustomerCreateSchema,
   listCustomers,
 } from "@/lib/server/db/customers"
-import { parseOrRespond } from "@/lib/utils"
+import { jsonResponse, parseOrRespond } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic"
  */
 export const GET = async (request: Request) => {
   const customers = await listCustomers()
-  return Response.json(customers)
+  return jsonResponse(customers)
 }
 
 /**
@@ -25,5 +25,5 @@ export const POST = async (request: Request) => {
   if (input instanceof Response) return input
 
   const customer = await createCustomer(input)
-  return Response.json(customer)
+  return jsonResponse(customer)
 }
