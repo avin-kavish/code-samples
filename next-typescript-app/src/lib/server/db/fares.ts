@@ -20,3 +20,7 @@ export function createFare(data: FareCreateSchema) {
 export function updateFare(id: number, data: FareCreateSchema) {
   return prisma.fare.update({ where: { id }, data })
 }
+
+export function deleteFare(id: number) {
+  return prisma.fare.delete({ where: { id } })
+}
