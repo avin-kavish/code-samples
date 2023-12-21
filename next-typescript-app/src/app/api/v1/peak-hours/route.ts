@@ -1,13 +1,27 @@
-import { getPeakHours } from "@/lib/server/db/peak-hours"
+import {
+  createPeakHours,
+  getPeakHours,
+  PeakHoursSchema,
+} from "@/lib/server/db/peak-hours"
+import { jsonResponse, withValidatedBody } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
 /**
  * Get peak hours
- * @constructor
  */
 export const GET = async (request: Request) => {
   const peakHours = await getPeakHours()
-  return Response.json(peakHours)
+  return jsonResponse(peakHours)
 }
 
+/**
+ * Create peak hour
+ */
+export const POST = withValidatedBody(
+  PeakHoursSchema,
+  async (body, request, params) => {
+    const peakHours = await createPeakHours(body)
+    return jsonResponse(peakHours)
+  },
+)
