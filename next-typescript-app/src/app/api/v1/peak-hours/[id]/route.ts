@@ -15,4 +15,5 @@ export const POST = withValidatedBody(
 
 export const DELETE = async (request: Request, params: { id: string }) => {
   await deletePeakHours(+params.id)
+  return new Response()
 }
