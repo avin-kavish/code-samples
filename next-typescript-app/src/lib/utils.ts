@@ -1,7 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { ZodType, ZodTypeDef } from "zod"
-import { CustomerCreateSchema } from "@/lib/server/db/customers"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -37,4 +36,11 @@ export function withValidatedBody<Output, T extends Record<string, any>>(
 
     return handler(input, request, params)
   }
+}
+
+export function jsonResponse(body: unknown) {
+  return new Response(
+    JSON.stringify(body, (_, v) => (typeof v === "bigint" ? Number(v) : v)),
+    { headers: { "content-type": "application/json" } },
+  )
 }
