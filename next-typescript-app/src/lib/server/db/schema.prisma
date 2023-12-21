@@ -13,6 +13,8 @@ model Fare {
   to          String
   peakFare    Decimal
   offPeakFare Decimal
+
+  @@unique([from, to])
 }
 
 model FareCap {
@@ -21,6 +23,8 @@ model FareCap {
   to        String
   dailyCap  Decimal
   weeklyCap Decimal
+
+  @@unique([from, to])
 }
 
 enum DayOfWeek {
@@ -30,7 +34,8 @@ enum DayOfWeek {
 }
 
 model PeakHour {
-  day   DayOfWeek @unique
+  id    Int @id @default(autoincrement())
+  day   DayOfWeek
   start String
   end   String
 }
