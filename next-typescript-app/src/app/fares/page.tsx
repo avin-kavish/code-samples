@@ -1,6 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/data-table"
+import { useRestApi } from "@/lib/api/rest-client"
 
 const columns = [
   { header: "From", accessorKey: "from" },
@@ -20,6 +21,8 @@ const sampleData = [
 ]
 
 export default function FaresPage() {
+  const fares = useRestApi("/api/v1/fares")
+
   return (
     <div className="mt-4 p-4 mx-auto max-w-screen-lg">
       <div className="pb-2 flex justify-between">
@@ -29,7 +32,7 @@ export default function FaresPage() {
         <Button>Add Fare</Button>
       </div>
       <div>
-        <DataTable columns={columns} data={sampleData} />
+        <DataTable columns={columns} data={fares.data ?? []} />
       </div>
     </div>
   )

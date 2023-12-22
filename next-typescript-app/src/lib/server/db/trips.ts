@@ -1,8 +1,14 @@
 import { prisma } from "@/lib/server/db/client"
 import z from "zod"
 
-export function listTrips() {
-  return prisma.trip.findMany()
+interface ListArgs {
+  expand?: string[]
+}
+
+export function listTrips(args: ListArgs = {}) {
+  return prisma.trip.findMany({
+    include: { customer: args.expand?.includes("customer") },
+  })
 }
 
 export const TripCreateSchema = z.object({

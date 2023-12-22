@@ -7,7 +7,8 @@ export const dynamic = "force-dynamic"
  * Get list of trips
  */
 export const GET = async (request: Request) => {
-  const trips = await listTrips()
+  const expand = new URL(request.url).searchParams.get("expand")?.split(",")
+  const trips = await listTrips({ expand })
   return jsonResponse(trips)
 }
 

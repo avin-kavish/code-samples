@@ -2,8 +2,11 @@
 import { useForm } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { useRestApi } from "@/lib/api/rest-client"
 
 export default function PeakHoursPage() {
+  const peakHours = useRestApi("/api/v1/peak-hours")
+
   const form = useForm({})
 
   return (
