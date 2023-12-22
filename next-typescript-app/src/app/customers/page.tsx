@@ -1,9 +1,9 @@
 "use client"
-import { Button } from "@/components/ui/button"
+import type { Customer } from "@prisma/client"
+
 import { DataTable } from "@/components/ui/data-table"
 import { useRestApi } from "@/lib/api/rest-client"
-import { ColumnDef } from "@tanstack/react-table"
-import type { Customer } from "@prisma/client"
+import { NewCustomerDialog } from "./_components/new-customer-dialog"
 
 const columns = [
   { header: "ID", accessorKey: "id" },
@@ -11,7 +11,7 @@ const columns = [
 ]
 
 export default function CustomersPage() {
-  const customers = useRestApi<Customer>("/api/v1/customers")
+  const customers = useRestApi<Customer, bigint>("/api/v1/customers")
 
   return (
     <div className="mt-4 p-4 mx-auto max-w-screen-lg">
@@ -19,7 +19,8 @@ export default function CustomersPage() {
         <div>
           <h2 className="text-lg font-semibold">Customers</h2>
         </div>
-        <Button>Add Customer</Button>
+
+        <NewCustomerDialog create={customers.create} />
       </div>
       <div>
         <DataTable columns={columns} data={customers.data ?? []} />
