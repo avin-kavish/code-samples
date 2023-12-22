@@ -2,7 +2,9 @@ import useSWR from "swr"
 import { API_BASE } from "@/lib/settings"
 import axios from "axios"
 
-export function useRestApi<TData extends { id: number }>(path: string) {
+export function useRestApi<TData extends { id: number | bigint | string }>(
+  path: string,
+) {
   const { data, error, isLoading, isValidating, mutate } = useSWR<TData[]>(
     API_BASE + path,
     (path: string) => axios.get(path).then(res => res.data),
