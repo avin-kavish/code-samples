@@ -28,6 +28,7 @@ export default function RootLayout({
 const navItems = [
   { label: "Fare Calculator", href: "fare-calculator" },
   { label: "Trips", href: "trips" },
+  { label: "Customers", href: "customers" },
   { label: "Fares", href: "fares" },
   { label: "Fare Caps", href: "fare-caps" },
   { label: "Peak Hours", href: "peak-hours" },
@@ -38,7 +39,7 @@ function AppSidebar() {
     <div className="py-4 px-2">
       <nav>
         <ul className="space-y-1">
-          {navItems.map((item) => (
+          {navItems.map(item => (
             <li className="">
               <Link
                 href={item.href}
