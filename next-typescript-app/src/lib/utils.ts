@@ -38,9 +38,11 @@ export function withValidatedBody<Output, T extends Record<string, any>>(
   }
 }
 
-export function jsonResponse(body: unknown) {
+export function jsonResponse(body?: unknown) {
   return new Response(
     JSON.stringify(body, (_, v) => (typeof v === "bigint" ? Number(v) : v)),
     { headers: { "content-type": "application/json" } },
   )
 }
+
+export type Params<T> = { params: T }

@@ -1,4 +1,4 @@
-import { jsonResponse, withValidatedBody } from "@/lib/utils"
+import { jsonResponse, Params, withValidatedBody } from "@/lib/utils"
 import {
   deleteFareCap,
   FareCapsCreateSchema,
@@ -7,13 +7,16 @@ import {
 
 export const POST = withValidatedBody(
   FareCapsCreateSchema,
-  async (body, request, params: { id: string }) => {
+  async (body, request, { params }: Params<{ id: string }>) => {
     const fare = await updateFareCap(+params.id, body)
     return jsonResponse(fare)
   },
 )
 
-export const DELETE = async (request: Request, params: { id: string }) => {
+export const DELETE = async (
+  request: Request,
+  { params }: Params<{ id: string }>,
+) => {
   await deleteFareCap(+params.id)
-  return new Response()
+  return jsonResponse()
 }
