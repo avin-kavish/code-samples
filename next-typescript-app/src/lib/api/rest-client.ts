@@ -2,10 +2,9 @@ import useSWR from "swr"
 import { API_BASE } from "@/lib/settings"
 import axios from "axios"
 
-export interface RestApi<
-  TData extends { id: Id },
-  Id extends number | bigint | string,
-> {
+export type IDType = number | bigint | string
+
+export interface RestApi<TData extends { id: Id }, Id extends IDType> {
   data: TData[] | undefined
   error: any
   isLoading: boolean
@@ -15,10 +14,9 @@ export interface RestApi<
   delete: (id: Id) => Promise<void>
 }
 
-export function useRestApi<
-  TData extends { id: Id },
-  Id extends number | bigint | string,
->(path: string): RestApi<TData, Id> {
+export function useRestApi<TData extends { id: Id }, Id extends IDType>(
+  path: string,
+): RestApi<TData, Id> {
   const { data, error, isLoading, isValidating, mutate } = useSWR<TData[]>(
     API_BASE + path,
     (path: string) => axios.get(path).then(res => res.data),
@@ -31,21 +29,30 @@ export function useRestApi<
     isValidating,
     async create(data) {
       const res = await axios.post<TData>(path, data)
-      mutate(currentData => {
-        return [...(currentData ?? []), res.data]
-      })
+      mutate(
+        currentData => {
+          return [...(currentData ?? []), res.data]
+        },
+        { revalidate: false },
+      )
     },
     async update(id, data) {
-      mutate(currentData => {
-        return currentData?.filter(c => c.id !== id)
-      })
       const res = await axios.post(`${path}/${id}`, data)
+      mutate(
+        currentData => {
+          return currentData?.filter(c => c.id !== id)
+        },
+        { revalidate: false },
+      )
     },
     async delete(id) {
-      mutate(currentData => {
-        return currentData?.filter(c => c.id !== id)
-      })
       await axios.delete(`${path}/${id}`)
+      mutate(
+        currentData => {
+          return currentData?.filter(c => c.id !== id)
+        },
+        { revalidate: false },
+      )
     },
   }
 }

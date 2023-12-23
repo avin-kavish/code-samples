@@ -15,7 +15,7 @@ export async function clearDb(txn: Txn) {
 
 const FARES = [["red", "green", 4.5, 3]] as [string, string, number, number][]
 
-export async function createFares(txn: Txn) {
+async function createFares(txn: Txn) {
   await txn.fare.createMany({
     data: FARES.map(([from, to, peakFare, offPeakFare]) => ({
       from,
@@ -33,7 +33,7 @@ const FARES_CAPS = [["red", "green", 12, 30]] as [
   number,
 ][]
 
-export async function createFareCaps(txn: Txn) {
+async function createFareCaps(txn: Txn) {
   await txn.fareCap.createMany({
     data: FARES_CAPS.map(([from, to, dailyCap, weeklyCap]) => ({
       from,
@@ -53,7 +53,7 @@ const PEAK_HOURS: PeakHours = {
   ],
 }
 
-export async function createPeakHours(txn: Txn) {
+async function createPeakHours(txn: Txn) {
   const data = Object.entries(PEAK_HOURS).flatMap(([day, times]) =>
     times.map(t => ({ ...t, day: day as DayOfWeek })),
   )
@@ -66,9 +66,9 @@ const CUSTOMERS = [
   [3, "Jack"],
 ] as [number, string][]
 
-export async function createCustomers(txn: Txn) {
+async function createCustomers(txn: Txn) {
   await txn.customer.createMany({
-    data: CUSTOMERS.map(([id, name]) => ({ id, name })),
+    data: CUSTOMERS.map(([id, name]) => ({ name })),
   })
 }
 
@@ -84,7 +84,7 @@ const TRIPS = [["2023-09-12", 1, "green", "red"]] as [
   string,
 ][]
 
-export async function createTrips(txn: Txn) {
+async function createTrips(txn: Txn) {
   await txn.trip.createMany({
     data: TRIPS.map(([date, customerId, from, to]) => ({
       date: new Date(date).toISOString(),
@@ -94,6 +94,8 @@ export async function createTrips(txn: Txn) {
     })),
   })
 }
+
+const CUSTOMER_TRIPS = [{}, {}]
 
 export async function seedDb() {
   await prisma.$transaction(async txn => {
