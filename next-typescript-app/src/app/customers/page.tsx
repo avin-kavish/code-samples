@@ -4,6 +4,7 @@ import type { Customer } from "@prisma/client"
 import { DataTable } from "@/components/ui/data-table"
 import { useRestApi } from "@/lib/api/rest-client"
 import { NewCustomerDialog } from "./_components/new-customer-dialog"
+import { useRouter } from "next/navigation"
 
 const columns = [
   { header: "ID", accessorKey: "id" },
@@ -11,6 +12,7 @@ const columns = [
 ]
 
 export default function CustomersPage() {
+  const router = useRouter()
   const customers = useRestApi<Customer, bigint>("/api/v1/customers")
 
   return (
@@ -27,6 +29,7 @@ export default function CustomersPage() {
           columns={columns}
           data={customers.data ?? []}
           delete={customers.delete}
+          edit={id => router.push(`/customers/${id}/edit`)}
         />
       </div>
     </div>

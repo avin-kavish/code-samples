@@ -1,9 +1,12 @@
+import { useMemo } from "react"
+import { EditIcon, TrashIcon } from "lucide-react"
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+
 import {
   Table,
   TableBody,
@@ -23,20 +26,27 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-
-import { useMemo } from "react"
 import { Button } from "@/components/ui/button"
-import { IDType } from "@/lib/api/rest-client"
-import { TrashIcon } from "lucide-react"
+import type { IDType } from "@/lib/api/rest-client"
 
 interface ActionProps {
   id: IDType
   delete?: (id: any) => Promise<void>
+  edit?: (id: any) => void
 }
 
 function Actions({ id, ...props }: ActionProps) {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-1">
+      {props.edit && (
+        <Button
+          size="icon"
+          variant="ghost"
+          onPointerDown={() => props.edit!(id)}
+        >
+          <EditIcon className="h-4 w-4 text-muted-foreground" />
+        </Button>
+      )}
       {props.delete && (
         <AlertDialog>
           <AlertDialogTrigger asChild>
@@ -74,6 +84,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   delete?: (id: any) => Promise<void>
+  edit?: (id: any) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -90,7 +101,7 @@ export function DataTable<TData, TValue>({
         header: "Actions",
         cell: props => {
           const id = (props.row.original as { id: IDType }).id
-          return <Actions id={id} delete={rest.delete} />
+          return <Actions id={id} delete={rest.delete} edit={rest.edit} />
         },
       } satisfies ColumnDef<TData>
 
