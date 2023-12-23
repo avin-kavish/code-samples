@@ -23,7 +23,11 @@ export default function CustomersPage() {
         <NewCustomerDialog create={customers.create} />
       </div>
       <div>
-        <DataTable columns={columns} data={customers.data ?? []} />
+        <DataTable
+          columns={columns}
+          data={customers.data ?? []}
+          delete={customers.delete}
+        />
       </div>
     </div>
   )
