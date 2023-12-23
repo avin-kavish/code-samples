@@ -12,7 +12,6 @@ const columns = [
 ]
 
 export default function CustomersPage() {
-  const router = useRouter()
   const customers = useRestApi<Customer, bigint>("/api/v1/customers")
 
   return (
@@ -27,9 +26,10 @@ export default function CustomersPage() {
       <div>
         <DataTable
           columns={columns}
+          isLoading={customers.isLoading}
           data={customers.data ?? []}
           delete={customers.delete}
-          edit={id => router.push(`/customers/${id}/edit`)}
+          editRoute={id => `/customers/${id}/edit`}
         />
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { jsonResponse, Params, withValidatedBody } from "@/lib/utils"
-import { deleteFare, FareCreateSchema, updateFare } from "@/lib/server/db/fares"
+import { deleteFare, updateFare } from "@/lib/server/db/fares"
+import { FareCreateSchema } from "@/lib/schema"
 
 export const POST = withValidatedBody(
   FareCreateSchema,

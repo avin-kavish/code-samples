@@ -1,23 +1,13 @@
 "use client"
-import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/data-table"
 import { useRestApi } from "@/lib/api/rest-client"
+import { NewFareDialog } from "./_components/new-fare-dialog"
 
 const columns = [
   { header: "From", accessorKey: "from" },
   { header: "To", accessorKey: "to" },
   { header: "Peak Fare", accessorKey: "peakFare" },
   { header: "Off Peak Fare", accessorKey: "offPeakFare" },
-]
-
-const sampleData = [
-  {
-    id: "1",
-    from: "Green",
-    to: "Red",
-    peakFare: 8.5,
-    offPeakFare: 6,
-  },
 ]
 
 export default function FaresPage() {
@@ -29,10 +19,16 @@ export default function FaresPage() {
         <div>
           <h2 className="text-lg font-semibold">Fares</h2>
         </div>
-        <Button>Add Fare</Button>
+        <NewFareDialog create={fares.create} />
       </div>
       <div>
-        <DataTable columns={columns} data={fares.data ?? []} />
+        <DataTable
+          columns={columns}
+          isLoading={fares.isLoading}
+          data={fares.data ?? []}
+          delete={fares.delete}
+          editRoute={id => `/fares/${id}/edit`}
+        />
       </div>
     </div>
   )

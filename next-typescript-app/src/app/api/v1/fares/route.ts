@@ -1,5 +1,6 @@
-import { createFare, FareCreateSchema, listFares } from "@/lib/server/db/fares"
+import { createFare, listFares } from "@/lib/server/db/fares"
 import { jsonResponse, withValidatedBody } from "@/lib/utils"
+import { FareCreateSchema } from "@/lib/schema"
 
 export const dynamic = "force-dynamic"
 

@@ -28,24 +28,23 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import type { IDType } from "@/lib/api/rest-client"
+import Link from "next/link"
 
 interface ActionProps {
   id: IDType
   delete?: (id: any) => Promise<void>
-  edit?: (id: any) => void
+  editRoute?: (id: any) => string
 }
 
 function Actions({ id, ...props }: ActionProps) {
   return (
     <div className="flex items-center gap-1">
-      {props.edit && (
-        <Button
-          size="icon"
-          variant="ghost"
-          onPointerDown={() => props.edit!(id)}
-        >
-          <EditIcon className="h-4 w-4 text-muted-foreground" />
-        </Button>
+      {props.editRoute && (
+        <Link href={props.editRoute!(id)}>
+          <Button size="icon" variant="ghost">
+            <EditIcon className="h-4 w-4 text-muted-foreground" />
+          </Button>
+        </Link>
       )}
       {props.delete && (
         <AlertDialog>
@@ -81,14 +80,16 @@ function Actions({ id, ...props }: ActionProps) {
 }
 
 interface DataTableProps<TData, TValue> {
+  isLoading: boolean
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   delete?: (id: any) => Promise<void>
-  edit?: (id: any) => void
+  editRoute?: (id: any) => string
 }
 
 export function DataTable<TData, TValue>({
   columns: columnsProp,
+  isLoading,
   data,
   ...rest
 }: DataTableProps<TData, TValue>) {
@@ -101,7 +102,9 @@ export function DataTable<TData, TValue>({
         header: "Actions",
         cell: props => {
           const id = (props.row.original as { id: IDType }).id
-          return <Actions id={id} delete={rest.delete} edit={rest.edit} />
+          return (
+            <Actions id={id} delete={rest.delete} editRoute={rest.editRoute} />
+          )
         },
       } satisfies ColumnDef<TData>
 
@@ -158,7 +161,7 @@ export function DataTable<TData, TValue>({
                 colSpan={columns.length}
                 className="h-24 text-center text-muted-foreground"
               >
-                No results.
+                {isLoading ? "Loading..." : "No results."}
               </TableCell>
             </TableRow>
           )}
