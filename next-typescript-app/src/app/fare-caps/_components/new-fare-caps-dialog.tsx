@@ -12,33 +12,33 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { FareCreateSchema } from "@/lib/schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { UseRestApi } from "@/lib/api/rest-client"
-import { ApiFare } from "@/lib/api/types"
+import { RestApi } from "@/lib/api/types"
+import { FareCapsCreateSchema } from "@/lib/schema"
 
-const fields: [keyof FareCreateSchema, string][] = [
+const fields: [keyof FareCapsCreateSchema, string][] = [
   ["from", "From"],
   ["to", "To"],
-  ["peakFare", "Peak Fare"],
-  ["offPeakFare", "Off Peak Fare"],
+  ["dailyCap", "Daily Cap"],
+  ["weeklyCap", "Weekly Cap"],
 ]
 
-export function NewFareDialog({
+export function NewFareCapsDialog({
   create,
 }: {
-  create: UseRestApi<ApiFare, number>["create"]
+  create: UseRestApi<RestApi.FareCap, number>["create"]
 }) {
   const [isOpen, setOpen] = useState(false)
-  const form = useForm<FareCreateSchema>({
-    resolver: zodResolver(FareCreateSchema),
+  const form = useForm<FareCapsCreateSchema>({
+    resolver: zodResolver(FareCapsCreateSchema),
   })
 
   const onSubmit = form.handleSubmit(async data => {
     await create({
       ...data,
-      peakFare: String(data.peakFare),
-      offPeakFare: String(data.offPeakFare),
+      dailyCap: String(data.dailyCap),
+      weeklyCap: String(data.weeklyCap),
     })
     setOpen(false)
     form.reset()
@@ -47,7 +47,7 @@ export function NewFareDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add Fare</Button>
+        <Button>Add Fare Cap</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={onSubmit}>
@@ -77,3 +77,4 @@ export function NewFareDialog({
     </Dialog>
   )
 }
+;``

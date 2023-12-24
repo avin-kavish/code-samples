@@ -1,9 +1,6 @@
 import { jsonResponse, Params, withValidatedBody } from "@/lib/utils"
-import {
-  deleteFareCap,
-  FareCapsCreateSchema,
-  updateFareCap,
-} from "@/lib/server/db/fare-caps"
+import { deleteFareCap, updateFareCap } from "@/lib/server/db/fare-caps"
+import { FareCapsCreateSchema } from "@/lib/schema"
 
 export const POST = withValidatedBody(
   FareCapsCreateSchema,

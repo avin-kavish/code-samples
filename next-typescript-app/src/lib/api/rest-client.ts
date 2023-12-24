@@ -4,7 +4,7 @@ import axios from "axios"
 
 export type IDType = number | bigint | string
 
-export interface RestApi<TData extends { id: Id }, Id extends IDType> {
+export interface UseRestApi<TData extends { id: Id }, Id extends IDType> {
   data: TData[] | undefined
   error: any
   isLoading: boolean
@@ -16,7 +16,7 @@ export interface RestApi<TData extends { id: Id }, Id extends IDType> {
 
 export function useRestApi<TData extends { id: Id }, Id extends IDType>(
   path: string,
-): RestApi<TData, Id> {
+): UseRestApi<TData, Id> {
   const { data, error, isLoading, isValidating, mutate } = useSWR<TData[]>(
     API_BASE + path,
     (path: string) => axios.get(path).then(res => res.data),

@@ -1,9 +1,6 @@
-import {
-  createFareCap,
-  FareCapsCreateSchema,
-  listFareCaps,
-} from "@/lib/server/db/fare-caps"
+import { createFareCap, listFareCaps } from "@/lib/server/db/fare-caps"
 import { jsonResponse, withValidatedBody } from "@/lib/utils"
+import { FareCapsCreateSchema } from "@/lib/schema"
 
 export const dynamic = "force-dynamic"
 

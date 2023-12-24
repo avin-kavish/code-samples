@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { RestApi } from "@/lib/api/rest-client"
+import { UseRestApi } from "@/lib/api/rest-client"
 import { Customer } from "@prisma/client"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
@@ -18,7 +18,7 @@ import { useState } from "react"
 export function NewCustomerDialog({
   create,
 }: {
-  create: RestApi<Customer, bigint>["create"]
+  create: UseRestApi<Customer, bigint>["create"]
 }) {
   const [isOpen, setOpen] = useState(false)
   const form = useForm({ defaultValues: { name: "" } })
