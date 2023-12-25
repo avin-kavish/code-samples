@@ -2,6 +2,7 @@
 import { DataTable } from "@/components/ui/data-table"
 import { useRestApi } from "@/lib/api/rest-client"
 import { NewFareDialog } from "./_components/new-fare-dialog"
+import { EditFareDialog } from "@/app/fares/_components/edit-fare-dialog"
 
 const columns = [
   { header: "From", accessorKey: "from" },
@@ -27,7 +28,14 @@ export default function FaresPage() {
           isLoading={fares.isLoading}
           data={fares.data ?? []}
           delete={fares.delete}
-          editRoute={id => `/fares/${id}/edit`}
+          editDialog={({ id, initialValues, onDone }) => (
+            <EditFareDialog
+              id={id}
+              initialValues={initialValues}
+              update={fares.update}
+              onDone={onDone}
+            />
+          )}
         />
       </div>
     </div>

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 
 interface CustomerFormProps {
   footer: ReactNode
-  onSubmit: (data: { name: string }) => Promise<void>
+  onSubmit: (data: CustomerCreateSchema) => Promise<void>
   initialValues?: CustomerCreateSchema
 }
 
