@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { ReactNode, useMemo, useState } from "react"
 import { EditIcon, TrashIcon } from "lucide-react"
 import {
   ColumnDef,
@@ -29,14 +29,29 @@ import {
 import { Button } from "@/components/ui/button"
 import type { IDType } from "@/lib/api/rest-client"
 import Link from "next/link"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
+
+type EditDialog = ({
+  id,
+  initialValues,
+  onDone,
+}: {
+  id: any
+  initialValues?: Record<string, any>
+  onDone: () => void
+}) => ReactNode
 
 interface ActionProps {
   id: IDType
+  initialValues?: Record<string, any>
   delete?: (id: any) => Promise<void>
   editRoute?: (id: any) => string
+  editDialog?: EditDialog
 }
 
-function Actions({ id, ...props }: ActionProps) {
+function Actions({ id, initialValues, ...props }: ActionProps) {
+  const [isOpen, setOpen] = useState(false)
+
   return (
     <div className="flex items-center gap-1">
       {props.editRoute && (
@@ -45,6 +60,20 @@ function Actions({ id, ...props }: ActionProps) {
             <EditIcon className="h-4 w-4 text-muted-foreground" />
           </Button>
         </Link>
+      )}
+      {props.editDialog && (
+        <Dialog open={isOpen} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button size="icon" variant="ghost">
+              <EditIcon className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          </DialogTrigger>
+          {props.editDialog({
+            id,
+            initialValues,
+            onDone: () => setOpen(false),
+          })}
+        </Dialog>
       )}
       {props.delete && (
         <AlertDialog>
@@ -85,6 +114,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
   delete?: (id: any) => Promise<void>
   editRoute?: (id: any) => string
+  editDialog?: EditDialog
 }
 
 export function DataTable<TData, TValue>({
@@ -103,7 +133,13 @@ export function DataTable<TData, TValue>({
         cell: props => {
           const id = (props.row.original as { id: IDType }).id
           return (
-            <Actions id={id} delete={rest.delete} editRoute={rest.editRoute} />
+            <Actions
+              id={id}
+              initialValues={props.row.original as Record<string, any>}
+              delete={rest.delete}
+              editRoute={rest.editRoute}
+              editDialog={rest.editDialog}
+            />
           )
         },
       } satisfies ColumnDef<TData>

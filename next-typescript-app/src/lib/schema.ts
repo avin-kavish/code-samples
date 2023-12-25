@@ -16,3 +16,8 @@ export const FareCapsCreateSchema = z.object({
   weeklyCap: z.coerce.number().positive(),
 })
 export type FareCapsCreateSchema = z.infer<typeof FareCapsCreateSchema>
+
+export const CustomerCreateSchema = z.object({
+  name: z.string().min(1),
+})
+export type CustomerCreateSchema = z.infer<typeof CustomerCreateSchema>

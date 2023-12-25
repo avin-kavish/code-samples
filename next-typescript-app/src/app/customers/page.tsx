@@ -4,7 +4,7 @@ import type { Customer } from "@prisma/client"
 import { DataTable } from "@/components/ui/data-table"
 import { useRestApi } from "@/lib/api/rest-client"
 import { NewCustomerDialog } from "./_components/new-customer-dialog"
-import { useRouter } from "next/navigation"
+import { EditCustomerDialog } from "./_components/edit-customer-dialog"
 
 const columns = [
   { header: "ID", accessorKey: "id" },
@@ -29,7 +29,14 @@ export default function CustomersPage() {
           isLoading={customers.isLoading}
           data={customers.data ?? []}
           delete={customers.delete}
-          editRoute={id => `/customers/${id}/edit`}
+          editDialog={({ id, initialValues, onDone }) => (
+            <EditCustomerDialog
+              id={id}
+              initialValues={initialValues}
+              update={customers.update}
+              onDone={onDone}
+            />
+          )}
         />
       </div>
     </div>

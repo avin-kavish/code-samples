@@ -1,9 +1,6 @@
-import {
-  createCustomer,
-  CustomerCreateSchema,
-  listCustomers,
-} from "@/lib/server/db/customers"
+import { createCustomer, listCustomers } from "@/lib/server/db/customers"
 import { jsonResponse, parseOrRespond } from "@/lib/utils"
+import { CustomerCreateSchema } from "@/lib/schema"
 
 export const dynamic = "force-dynamic"
 

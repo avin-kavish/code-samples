@@ -1,9 +1,6 @@
-import {
-  CustomerCreateSchema,
-  deleteCustomer,
-  updateCustomer,
-} from "@/lib/server/db/customers"
+import { deleteCustomer, updateCustomer } from "@/lib/server/db/customers"
 import { jsonResponse, withValidatedBody } from "@/lib/utils"
+import { CustomerCreateSchema } from "@/lib/schema"
 
 export const POST = withValidatedBody(
   CustomerCreateSchema,
