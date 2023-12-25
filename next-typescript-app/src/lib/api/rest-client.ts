@@ -40,7 +40,12 @@ export function useRestApi<TData extends { id: Id }, Id extends IDType>(
       const res = await axios.post(`${path}/${id}`, data)
       mutate(
         currentData => {
-          return currentData?.filter(c => c.id !== id)
+          return currentData?.map(c => {
+            if (c.id === id) {
+              return { id, ...data } as TData
+            }
+            return c
+          })
         },
         { revalidate: false },
       )

@@ -25,7 +25,7 @@ export function withValidatedBody<Output, T extends Record<string, any>>(
   handler: (
     body: Output,
     request: Request,
-    params: T,
+    { params }: { params: T },
   ) => Promise<Response | void>,
 ) {
   return async (request: Request, { params }: { params: T }) => {
@@ -34,7 +34,7 @@ export function withValidatedBody<Output, T extends Record<string, any>>(
     const input = parseOrRespond(schema, body)
     if (input instanceof Response) return input
 
-    return handler(input, request, params)
+    return handler(input, request, { params })
   }
 }
 

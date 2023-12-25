@@ -1,61 +1,167 @@
 "use client"
-import { useForm } from "react-hook-form"
+import { useFieldArray, useForm } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useRestApi } from "@/lib/api/rest-client"
+import { useEffect } from "react"
+import { PeakHour } from "@prisma/client"
+import { EditIcon, TrashIcon } from "lucide-react"
+import z from "zod"
+import { PeakHoursSchema } from "@/lib/server/db/peak-hours"
+import { zodResolver } from "@hookform/resolvers/zod"
+import invariant from "ts-invariant"
+
+type PeakHourItem = PeakHour //{ id: number; start: string; end: string }
+
+const PeakHoursRecordSchema = PeakHoursSchema.extend({ id: z.number() })
+
+const PeakHoursFormSchema = z.object({
+  weekday: z.array(PeakHoursRecordSchema),
+  saturday: z.array(PeakHoursRecordSchema),
+  sunday: z.array(PeakHoursRecordSchema),
+})
 
 export default function PeakHoursPage() {
-  const peakHours = useRestApi("/api/v1/peak-hours")
+  const peakHours = useRestApi<PeakHour, number>("/api/v1/peak-hours")
 
-  const form = useForm({})
+  const form = useForm({
+    resolver: zodResolver(PeakHoursFormSchema),
+    defaultValues: {
+      weekday: [] as PeakHourItem[],
+      saturday: [] as PeakHourItem[],
+      sunday: [] as PeakHourItem[],
+    },
+  })
+
+  useEffect(() => {
+    if (peakHours.data) {
+      form.reset({
+        weekday: peakHours.data.filter(ph => ph.day === "weekday"),
+        saturday: peakHours.data.filter(ph => ph.day === "saturday"),
+        sunday: peakHours.data.filter(ph => ph.day === "sunday"),
+      })
+    }
+  }, [peakHours.data])
+
+  const weekdayArray = useFieldArray({
+    control: form.control,
+    name: "weekday",
+  })
+
+  const saturdayArray = useFieldArray({
+    control: form.control,
+    name: "saturday",
+  })
+
+  const sundayArray = useFieldArray({
+    control: form.control,
+    name: "sunday",
+  })
+
+  const segments = [
+    ["Weekdays", "weekday", weekdayArray],
+    ["Saturday", "saturday", saturdayArray],
+    ["Sunday", "sunday", sundayArray],
+  ] as const
+
+  const onSubmit = form.handleSubmit(async data => {
+    const original = peakHours.data
+    invariant(original)
+    const originalIds = original.map(d => d.id)
+
+    const newEntries = [...data.weekday, ...data.sunday, ...data.saturday]
+    const newIds = newEntries.map(d => d.id)
+
+    // find to delete
+    const toDelete = original.filter(o => !newIds.includes(o.id))
+
+    // find to update
+    const overlap = original.filter(o => newIds.includes(o.id))
+    // todo: detect changes in overlapping ids
+    const changes = overlap.reduce((acc, original) => {
+      const newEntry = newEntries.find(e => e.id === original.id)
+      invariant(newEntry)
+
+      if (newEntry.start !== original.start || newEntry.end !== original.end) {
+        acc.push(newEntry)
+      }
+      return acc
+    }, [] as PeakHourItem[])
+
+    // find to add
+    const toAdd = newEntries.filter(n => !originalIds.includes(n.id))
+
+    console.log(toDelete, overlap, toAdd)
+
+    await Promise.all([
+      ...toDelete.map(d => peakHours.delete(d.id)),
+      ...toAdd.map(d => peakHours.create(d)),
+      ...changes.map(d => peakHours.update(d.id, d)),
+    ])
+  })
 
   return (
-    <div className="mt-4 p-4 mx-auto max-w-screen-lg space-y-6">
-      <div>
-        <h2 className="text-lg font-semibold">Peak Hours</h2>
-      </div>
-      <div>
-        <h3 className="mb-1 text-base font-medium">Weekdays</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="">
-            <label>Start</label>
-            <Input {...form.register("weekday.start")} />
+    <div className="mt-4 p-4 mx-auto max-w-screen-lg">
+      <form onSubmit={onSubmit}>
+        <div className="space-y-6 pr-8">
+          <div>
+            <h2 className="text-lg font-semibold">Peak Hours</h2>
           </div>
-          <div className="">
-            <label>End</label>
-            <Input {...form.register("weekday.end")} />
+          {segments.map(([title, day, array]) => (
+            <div key={day}>
+              <h3 className="mb-1 text-base font-medium">{title}</h3>
+              <div className="space-y-4">
+                {array.fields.map((field, index) => (
+                  <div key={field.id} className="relative">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="">
+                        <label>Start</label>
+                        <Input {...form.register(`${day}.${index}.start`)} />
+                      </div>
+                      <div className="">
+                        <label>End</label>
+                        <Input {...form.register(`${day}.${index}.end`)} />
+                      </div>
+                    </div>
+                    <div className="absolute right-0 top-0 translate-x-full pl-3 pt-6">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onPointerDown={() => array.remove(index)}
+                      >
+                        <TrashIcon className="h-4 w-4 text-muted-foreground" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  className="border border-dashed rounded-md text-muted-foreground text-xs p-3 px-4 text-center w-full"
+                  onPointerDown={() =>
+                    array.append({
+                      id: -1 * Math.random() - 1,
+                      day,
+                      start: "",
+                      end: "",
+                    })
+                  }
+                >
+                  Add Peak Hours
+                </button>
+              </div>
+            </div>
+          ))}
+          <div className="flex gap-4 justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              onPointerDown={() => form.reset()}
+            >
+              Reset
+            </Button>
+            <Button type="submit">Save</Button>
           </div>
         </div>
-      </div>
-      <div>
-        <h3 className="mb-1 text-base font-medium">Saturday</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="">
-            <label>Start</label>
-            <Input {...form.register("saturday.start")} />
-          </div>
-          <div className="">
-            <label>End</label>
-            <Input {...form.register("saturday.end")} />
-          </div>
-        </div>
-      </div>
-      <div>
-        <h3 className="mb-1 text-base font-medium">Sunday</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="">
-            <label>Start</label>
-            <Input {...form.register("sunday.start")} />
-          </div>
-          <div className="">
-            <label>End</label>
-            <Input {...form.register("sunday.end")} />
-          </div>
-        </div>
-      </div>
-      <div className="flex justify-end">
-        <Button>Save</Button>
-      </div>
+      </form>
     </div>
   )
 }
