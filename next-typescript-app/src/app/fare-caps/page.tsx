@@ -2,6 +2,7 @@
 import { DataTable } from "@/components/ui/data-table"
 import { useRestApi } from "@/lib/api/rest-client"
 import { NewFareCapsDialog } from "./_components/new-fare-caps-dialog"
+import { EditFareCapsDialog } from "./_components/edit-fare-caps-dialog"
 
 const columns = [
   { header: "From", accessorKey: "from" },
@@ -27,7 +28,14 @@ export default function FareCapsPage() {
           isLoading={fareCaps.isLoading}
           data={fareCaps.data ?? []}
           delete={fareCaps.delete}
-          editRoute={id => `/fare-caps/${id}/edit`}
+          editDialog={({ id, initialValues, onDone }) => (
+            <EditFareCapsDialog
+              id={id}
+              initialValues={initialValues}
+              update={fareCaps.update}
+              onDone={onDone}
+            />
+          )}
         />
       </div>
     </div>

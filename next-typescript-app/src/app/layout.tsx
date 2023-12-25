@@ -26,12 +26,12 @@ export default function RootLayout({
 }
 
 const navItems = [
-  { label: "Fare Calculator", href: "fare-calculator" },
-  { label: "Trips", href: "trips" },
-  { label: "Customers", href: "customers" },
-  { label: "Fares", href: "fares" },
-  { label: "Fare Caps", href: "fare-caps" },
-  { label: "Peak Hours", href: "peak-hours" },
+  { label: "Fare Calculator", href: "/fare-calculator" },
+  { label: "Trips", href: "/trips" },
+  { label: "Customers", href: "/customers" },
+  { label: "Fares", href: "/fares" },
+  { label: "Fare Caps", href: "/fare-caps" },
+  { label: "Peak Hours", href: "/peak-hours" },
 ]
 
 function AppSidebar() {
