@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/server/db/client"
-import z from "zod"
+import { TripCreateSchema } from "@/lib/schema"
 
 interface ListArgs {
   expand?: string[]
@@ -8,19 +8,15 @@ interface ListArgs {
 export function listTrips(args: ListArgs = {}) {
   return prisma.trip.findMany({
     include: { customer: args.expand?.includes("customer") },
+    orderBy: { date: "desc" },
   })
 }
 
-export const TripCreateSchema = z.object({
-  customerId: z.number(),
-  from: z.string(),
-  to: z.string(),
-  date: z.string().datetime(),
-})
-export type TripCreateSchema = z.infer<typeof TripCreateSchema>
-
-export function createTrip(data: TripCreateSchema) {
-  return prisma.trip.create({ data })
+export function createTrip(data: TripCreateSchema, args: ListArgs = {}) {
+  return prisma.trip.create({
+    data,
+    include: { customer: args.expand?.includes("customer") },
+  })
 }
 
 export function deleteTrip(id: number) {

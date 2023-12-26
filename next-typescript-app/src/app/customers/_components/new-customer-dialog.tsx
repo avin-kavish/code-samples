@@ -9,14 +9,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { UseRestApi } from "@/lib/api/rest-client"
-import { Customer } from "@prisma/client"
 import { CustomerForm } from "./customer-form"
+import { CustomerApi } from "@/lib/api/rest"
 
 export function NewCustomerDialog({
   create,
 }: {
-  create: UseRestApi<Customer, bigint>["create"]
+  create: CustomerApi["create"]
 }) {
   const [isOpen, setOpen] = useState(false)
 

@@ -8,9 +8,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { UseRestApi } from "@/lib/api/rest-client"
-import { Customer } from "@prisma/client"
 import { CustomerForm } from "./customer-form"
+import { CustomerApi } from "@/lib/api/rest"
 
 export function EditCustomerDialog({
   id,
@@ -20,7 +19,7 @@ export function EditCustomerDialog({
 }: {
   id: any
   initialValues: any
-  update: UseRestApi<Customer, bigint>["update"]
+  update: CustomerApi["update"]
   onDone: () => void
 }) {
   return (

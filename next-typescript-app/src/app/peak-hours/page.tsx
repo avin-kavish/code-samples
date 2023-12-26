@@ -2,7 +2,6 @@
 import { useFieldArray, useForm } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useRestApi } from "@/lib/api/rest-client"
 import { useEffect } from "react"
 import { PeakHour } from "@prisma/client"
 import { EditIcon, TrashIcon } from "lucide-react"
@@ -10,6 +9,7 @@ import z from "zod"
 import { PeakHoursSchema } from "@/lib/server/db/peak-hours"
 import { zodResolver } from "@hookform/resolvers/zod"
 import invariant from "ts-invariant"
+import { usePeakHoursApi } from "@/lib/api/rest"
 
 type PeakHourItem = PeakHour //{ id: number; start: string; end: string }
 
@@ -22,7 +22,7 @@ const PeakHoursFormSchema = z.object({
 })
 
 export default function PeakHoursPage() {
-  const peakHours = useRestApi<PeakHour, number>("/api/v1/peak-hours")
+  const peakHours = usePeakHoursApi()
 
   const form = useForm({
     resolver: zodResolver(PeakHoursFormSchema),
@@ -32,16 +32,6 @@ export default function PeakHoursPage() {
       sunday: [] as PeakHourItem[],
     },
   })
-
-  useEffect(() => {
-    if (peakHours.data) {
-      form.reset({
-        weekday: peakHours.data.filter(ph => ph.day === "weekday"),
-        saturday: peakHours.data.filter(ph => ph.day === "saturday"),
-        sunday: peakHours.data.filter(ph => ph.day === "sunday"),
-      })
-    }
-  }, [peakHours.data])
 
   const weekdayArray = useFieldArray({
     control: form.control,
@@ -57,6 +47,16 @@ export default function PeakHoursPage() {
     control: form.control,
     name: "sunday",
   })
+
+  useEffect(() => {
+    if (peakHours.data) {
+      form.reset({
+        weekday: peakHours.data.filter(ph => ph.day === "weekday"),
+        saturday: peakHours.data.filter(ph => ph.day === "saturday"),
+        sunday: peakHours.data.filter(ph => ph.day === "sunday"),
+      })
+    }
+  }, [peakHours.data])
 
   const segments = [
     ["Weekdays", "weekday", weekdayArray],

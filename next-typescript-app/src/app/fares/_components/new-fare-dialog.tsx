@@ -9,15 +9,10 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { UseRestApi } from "@/lib/api/rest-client"
-import { ApiFare } from "@/lib/api/types"
 import { FareForm } from "./fare-form"
+import { FaresApi } from "@/lib/api/rest"
 
-export function NewFareDialog({
-  create,
-}: {
-  create: UseRestApi<ApiFare, number>["create"]
-}) {
+export function NewFareDialog({ create }: { create: FaresApi["create"] }) {
   const [isOpen, setOpen] = useState(false)
 
   return (

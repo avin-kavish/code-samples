@@ -21,3 +21,11 @@ export const CustomerCreateSchema = z.object({
   name: z.string().min(1),
 })
 export type CustomerCreateSchema = z.infer<typeof CustomerCreateSchema>
+
+export const TripCreateSchema = z.object({
+  customerId: z.number(),
+  from: z.string(),
+  to: z.string(),
+  date: z.string().datetime(),
+})
+export type TripCreateSchema = z.infer<typeof TripCreateSchema>

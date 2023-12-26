@@ -9,14 +9,13 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { UseRestApi } from "@/lib/api/rest-client"
-import { RestApi } from "@/lib/api/types"
 import { FareCapsForm } from "./fare-caps-form"
+import { FareCapsApi } from "@/lib/api/rest"
 
 export function NewFareCapsDialog({
   create,
 }: {
-  create: UseRestApi<RestApi.FareCap, number>["create"]
+  create: FareCapsApi["create"]
 }) {
   const [isOpen, setOpen] = useState(false)
 

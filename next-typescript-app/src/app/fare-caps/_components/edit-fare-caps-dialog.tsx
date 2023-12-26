@@ -8,9 +8,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { UseRestApi } from "@/lib/api/rest-client"
-import { RestApi } from "@/lib/api/types"
 import { FareCapsForm } from "./fare-caps-form"
+import { FareCapsApi } from "@/lib/api/rest"
 
 export function EditFareCapsDialog({
   id,
@@ -20,7 +19,7 @@ export function EditFareCapsDialog({
 }: {
   id: any
   initialValues: any
-  update: UseRestApi<RestApi.FareCap, number>["update"]
+  update: FareCapsApi["update"]
   onDone: () => void
 }) {
   return (

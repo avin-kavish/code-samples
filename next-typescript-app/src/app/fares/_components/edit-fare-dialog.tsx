@@ -1,4 +1,3 @@
-import { UseRestApi } from "@/lib/api/rest-client"
 import {
   DialogContent,
   DialogDescription,
@@ -8,7 +7,7 @@ import {
 } from "@/components/ui/dialog"
 import { FareForm } from "./fare-form"
 import { Button } from "@/components/ui/button"
-import { ApiFare } from "@/lib/api/types"
+import { FaresApi } from "@/lib/api/rest"
 
 export function EditFareDialog({
   id,
@@ -18,7 +17,7 @@ export function EditFareDialog({
 }: {
   id: any
   initialValues: Record<string, any> | undefined
-  update: UseRestApi<ApiFare, number>["update"]
+  update: FaresApi["update"]
   onDone: () => void
 }) {
   return (

@@ -1,9 +1,9 @@
 "use client"
-import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/data-table"
-import { useRestApi } from "@/lib/api/rest-client"
 import { ColumnDef } from "@tanstack/react-table"
 import type { Trip } from "@prisma/client"
+import { NewTripsDialog } from "./_components/new-trips-dialog"
+import { useTripsApi } from "@/lib/api/rest"
 
 const formatter = new Intl.DateTimeFormat("en-US", {
   dateStyle: "short",
@@ -22,7 +22,7 @@ const columns = [
 ]
 
 export default function TripsPage() {
-  const trips = useRestApi<Trip>("/api/v1/trips?expand=customer")
+  const trips = useTripsApi({ params: { expand: "customer" } })
 
   return (
     <div className="mt-4 p-4 mx-auto max-w-screen-lg">
@@ -30,10 +30,15 @@ export default function TripsPage() {
         <div>
           <h2 className="text-lg font-semibold">Trips</h2>
         </div>
-        <Button>Add Trip</Button>
+        <NewTripsDialog create={trips.create} />
       </div>
       <div>
-        <DataTable columns={columns} data={trips.data ?? []} />
+        <DataTable
+          columns={columns}
+          isLoading={trips.isLoading}
+          data={trips.data ?? []}
+          delete={trips.delete}
+        />
       </div>
     </div>
   )

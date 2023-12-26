@@ -6,6 +6,11 @@ export namespace RestApi {
     dailyCap: string
     weeklyCap: string
   }
+
+  export interface Customer {
+    id: number
+    name: string
+  }
 }
 
 export interface ApiFare {

@@ -1,8 +1,8 @@
 "use client"
 import { DataTable } from "@/components/ui/data-table"
-import { useRestApi } from "@/lib/api/rest-client"
 import { NewFareCapsDialog } from "./_components/new-fare-caps-dialog"
 import { EditFareCapsDialog } from "./_components/edit-fare-caps-dialog"
+import { useFareCapsApi } from "@/lib/api/rest"
 
 const columns = [
   { header: "From", accessorKey: "from" },
@@ -12,7 +12,7 @@ const columns = [
 ]
 
 export default function FareCapsPage() {
-  const fareCaps = useRestApi("/api/v1/fare-caps")
+  const fareCaps = useFareCapsApi()
 
   return (
     <div className="mt-4 p-4 mx-auto max-w-screen-lg">

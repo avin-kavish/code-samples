@@ -1,8 +1,8 @@
 "use client"
 import { DataTable } from "@/components/ui/data-table"
-import { useRestApi } from "@/lib/api/rest-client"
 import { NewFareDialog } from "./_components/new-fare-dialog"
 import { EditFareDialog } from "@/app/fares/_components/edit-fare-dialog"
+import { useFaresApi } from "@/lib/api/rest"
 
 const columns = [
   { header: "From", accessorKey: "from" },
@@ -12,7 +12,7 @@ const columns = [
 ]
 
 export default function FaresPage() {
-  const fares = useRestApi("/api/v1/fares")
+  const fares = useFaresApi()
 
   return (
     <div className="mt-4 p-4 mx-auto max-w-screen-lg">

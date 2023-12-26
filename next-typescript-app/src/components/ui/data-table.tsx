@@ -27,7 +27,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import type { IDType } from "@/lib/api/rest-client"
+import type { IDType } from "@/lib/api/create-rest-client"
 import Link from "next/link"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 
