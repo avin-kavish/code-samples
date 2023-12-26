@@ -1,5 +1,6 @@
-import { createTrip, listTrips, TripCreateSchema } from "@/lib/server/db/trips"
+import { createTrip, listTrips } from "@/lib/server/db/trips"
 import { jsonResponse, withValidatedBody } from "@/lib/utils"
+import { TripCreateSchema } from "@/lib/schema"
 
 export const dynamic = "force-dynamic"
 
@@ -15,7 +16,11 @@ export const GET = async (request: Request) => {
 /**
  * Create a trip
  */
-export const POST = withValidatedBody(TripCreateSchema, async body => {
-  const trip = await createTrip(body)
-  return jsonResponse(trip)
-})
+export const POST = withValidatedBody(
+  TripCreateSchema,
+  async (body, request) => {
+    const expand = new URL(request.url).searchParams.get("expand")?.split(",")
+    const trip = await createTrip(body, { expand })
+    return jsonResponse(trip)
+  },
+)
