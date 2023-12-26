@@ -1,9 +1,6 @@
 import { jsonResponse, Params, withValidatedBody } from "@/lib/utils"
-import {
-  deletePeakHours,
-  PeakHoursSchema,
-  updatePeakHours,
-} from "@/lib/server/db/peak-hours"
+import { deletePeakHours, updatePeakHours } from "@/lib/server/db/peak-hours"
+import { PeakHoursSchema } from "@/lib/schema"
 
 export const POST = withValidatedBody(
   PeakHoursSchema,

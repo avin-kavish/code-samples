@@ -6,10 +6,10 @@ import { useEffect } from "react"
 import { PeakHour } from "@prisma/client"
 import { EditIcon, TrashIcon } from "lucide-react"
 import z from "zod"
-import { PeakHoursSchema } from "@/lib/server/db/peak-hours"
 import { zodResolver } from "@hookform/resolvers/zod"
 import invariant from "ts-invariant"
 import { usePeakHoursApi } from "@/lib/api/rest"
+import { PeakHoursSchema } from "@/lib/schema"
 
 type PeakHourItem = PeakHour //{ id: number; start: string; end: string }
 
@@ -98,7 +98,7 @@ export default function PeakHoursPage() {
       ...toAdd.map(d => peakHours.create(d)),
       ...changes.map(d => peakHours.update(d.id, d)),
     ])
-  })
+  }, console.warn)
 
   return (
     <div className="mt-4 p-4 mx-auto max-w-screen-lg">

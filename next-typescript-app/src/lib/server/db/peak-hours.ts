@@ -1,19 +1,12 @@
 import { DayOfWeek, PeakHour } from "@prisma/client"
 import { prisma } from "@/lib/server/db/client"
-import z from "zod"
+import { PeakHoursSchema } from "@/lib/schema"
 
 export type PeakHours = Record<DayOfWeek, { start: string; end: string }[]>
 
 export async function getPeakHours(): Promise<PeakHour[]> {
   return prisma.peakHour.findMany()
 }
-
-export const PeakHoursSchema = z.object({
-  day: z.nativeEnum(DayOfWeek),
-  start: z.string(),
-  end: z.string(),
-})
-export type PeakHoursSchema = z.infer<typeof PeakHoursSchema>
 
 export async function createPeakHours(
   data: PeakHoursSchema,

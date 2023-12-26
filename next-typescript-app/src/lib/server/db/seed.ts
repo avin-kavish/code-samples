@@ -1,7 +1,8 @@
 import type { DayOfWeek, PrismaClient } from "@prisma/client"
 import type { ITXClientDenyList } from "@prisma/client/runtime/library"
-import type { PeakHours, PeakHoursSchema } from "@/lib/server/db/peak-hours"
+import type { PeakHours } from "@/lib/server/db/peak-hours"
 import { prisma } from "@/lib/server/db/client"
+import { PeakHoursSchema } from "@/lib/schema"
 
 type Txn = Omit<PrismaClient, ITXClientDenyList>
 

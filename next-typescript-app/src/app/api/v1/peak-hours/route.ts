@@ -1,9 +1,6 @@
-import {
-  createPeakHours,
-  getPeakHours,
-  PeakHoursSchema,
-} from "@/lib/server/db/peak-hours"
+import { createPeakHours, getPeakHours } from "@/lib/server/db/peak-hours"
 import { jsonResponse, withValidatedBody } from "@/lib/utils"
+import { PeakHoursSchema } from "@/lib/schema"
 
 export const dynamic = "force-dynamic"
 
