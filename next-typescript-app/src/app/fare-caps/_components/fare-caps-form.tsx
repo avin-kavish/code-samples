@@ -42,7 +42,7 @@ export function FareCapsForm({
     <form onSubmit={onSubmit}>
       <div className="grid gap-4 py-4">
         {fields.map(field => (
-          <div className="flex items-center gap-4">
+          <div key={field[0]} className="flex items-center gap-4">
             <Label htmlFor={field[0]} className="w-40 text-right">
               {field[1]}
             </Label>

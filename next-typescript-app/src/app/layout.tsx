@@ -40,7 +40,7 @@ function AppSidebar() {
       <nav>
         <ul className="space-y-1">
           {navItems.map(item => (
-            <li className="">
+            <li key={item.href} className="">
               <Link
                 href={item.href}
                 className="block py-1 px-3 rounded-sm hover:text-accent-foreground hover:bg-accent"
