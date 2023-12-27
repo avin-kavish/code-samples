@@ -2,7 +2,6 @@ import type { DayOfWeek, PrismaClient } from "@prisma/client"
 import type { ITXClientDenyList } from "@prisma/client/runtime/library"
 import type { PeakHours } from "@/lib/server/db/peak-hours"
 import { prisma } from "@/lib/server/db/client"
-import { PeakHoursSchema } from "@/lib/schema"
 
 type Txn = Omit<PrismaClient, ITXClientDenyList>
 
@@ -78,12 +77,7 @@ async function createCustomers(txn: Txn) {
 // customerId: bigint | number
 // from: string
 // to: string
-const TRIPS = [["2023-09-12", 1, "green", "red"]] as [
-  string,
-  number,
-  string,
-  string,
-][]
+const TRIPS = [] as [string, number, string, string][]
 
 async function createTrips(txn: Txn) {
   await txn.trip.createMany({
@@ -96,7 +90,43 @@ async function createTrips(txn: Txn) {
   })
 }
 
-const CUSTOMER_TRIPS = [{}, {}]
+const CUSTOMER_TRIPS = [
+  {
+    name: "John",
+    trips: [
+      ["2023-09-12", "green", "red"],
+      ["2023-09-13", "green", "yellow"],
+    ],
+  },
+  {
+    name: "Jane",
+    trips: [
+      ["2023-09-15", "green", "red"],
+      ["2023-09-16", "green", "yellow"],
+    ],
+  },
+]
+
+async function createCustomerTrips(txn: Txn) {
+  await Promise.all(
+    CUSTOMER_TRIPS.map(c => {
+      return txn.customer.create({
+        data: {
+          name: c.name,
+          trips: {
+            createMany: {
+              data: c.trips.map(([date, from, to]) => ({
+                date: new Date(date).toISOString(),
+                from,
+                to,
+              })),
+            },
+          },
+        },
+      })
+    }),
+  )
+}
 
 export async function seedDb() {
   await prisma.$transaction(async txn => {
@@ -104,7 +134,6 @@ export async function seedDb() {
     await createFares(txn)
     await createFareCaps(txn)
     await createPeakHours(txn)
-    await createCustomers(txn)
-    await createTrips(txn)
+    await createCustomerTrips(txn)
   })
 }
