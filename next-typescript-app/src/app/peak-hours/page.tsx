@@ -100,6 +100,66 @@ export default function PeakHoursPage() {
     ])
   }, console.warn)
 
+  const content = peakHours.isLoading ? (
+    <div>Loading...</div>
+  ) : (
+    <>
+      {segments.map(([title, day, array]) => (
+        <div key={day}>
+          <h3 className="mb-1 text-base font-medium">{title}</h3>
+          <div className="space-y-4">
+            {array.fields.map((field, index) => (
+              <div key={field.id} className="relative">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="">
+                    <label>Start</label>
+                    <Input {...form.register(`${day}.${index}.start`)} />
+                  </div>
+                  <div className="">
+                    <label>End</label>
+                    <Input {...form.register(`${day}.${index}.end`)} />
+                  </div>
+                </div>
+                <div className="absolute right-0 top-0 translate-x-full pl-3 pt-6">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onPointerDown={() => array.remove(index)}
+                  >
+                    <TrashIcon className="h-4 w-4 text-muted-foreground" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+            <button
+              className="border border-dashed rounded-md text-muted-foreground text-xs p-3 px-4 text-center w-full"
+              onPointerDown={() =>
+                array.append({
+                  id: -1 * Math.random() - 1,
+                  day,
+                  start: "",
+                  end: "",
+                })
+              }
+            >
+              Add Peak Hours
+            </button>
+          </div>
+        </div>
+      ))}
+      <div className="flex gap-4 justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          onPointerDown={() => form.reset()}
+        >
+          Reset
+        </Button>
+        <Button type="submit">Save</Button>
+      </div>
+    </>
+  )
+
   return (
     <div className="mt-4 p-4 mx-auto max-w-screen-lg">
       <form onSubmit={onSubmit}>
@@ -107,59 +167,7 @@ export default function PeakHoursPage() {
           <div>
             <h2 className="text-lg font-semibold">Peak Hours</h2>
           </div>
-          {segments.map(([title, day, array]) => (
-            <div key={day}>
-              <h3 className="mb-1 text-base font-medium">{title}</h3>
-              <div className="space-y-4">
-                {array.fields.map((field, index) => (
-                  <div key={field.id} className="relative">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="">
-                        <label>Start</label>
-                        <Input {...form.register(`${day}.${index}.start`)} />
-                      </div>
-                      <div className="">
-                        <label>End</label>
-                        <Input {...form.register(`${day}.${index}.end`)} />
-                      </div>
-                    </div>
-                    <div className="absolute right-0 top-0 translate-x-full pl-3 pt-6">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onPointerDown={() => array.remove(index)}
-                      >
-                        <TrashIcon className="h-4 w-4 text-muted-foreground" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-                <button
-                  className="border border-dashed rounded-md text-muted-foreground text-xs p-3 px-4 text-center w-full"
-                  onPointerDown={() =>
-                    array.append({
-                      id: -1 * Math.random() - 1,
-                      day,
-                      start: "",
-                      end: "",
-                    })
-                  }
-                >
-                  Add Peak Hours
-                </button>
-              </div>
-            </div>
-          ))}
-          <div className="flex gap-4 justify-end">
-            <Button
-              type="button"
-              variant="outline"
-              onPointerDown={() => form.reset()}
-            >
-              Reset
-            </Button>
-            <Button type="submit">Save</Button>
-          </div>
+          {content}
         </div>
       </form>
     </div>
