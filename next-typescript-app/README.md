@@ -1,5 +1,5 @@
 
-**This is a next.js app demo-ing backend and frontend implementation skills.**
+**This is a next.js app demo-ing backend and frontend implementation.**
 
 - REST API - `src/app/api/v1/...`
 - ORM/Database - `src/lib/server/db/...`

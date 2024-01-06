@@ -1,7 +1,7 @@
 "use client"
 import { DataTable } from "@/components/ui/data-table"
 import { NewFareDialog } from "./_components/new-fare-dialog"
-import { EditFareDialog } from "@/app/fares/_components/edit-fare-dialog"
+import { EditFareDialog } from "./_components/edit-fare-dialog"
 import { useFaresApi } from "@/lib/api/rest"
 
 const columns = [
