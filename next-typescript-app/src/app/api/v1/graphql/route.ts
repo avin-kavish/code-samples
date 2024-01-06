@@ -1,18 +1,9 @@
 import { createYoga } from "graphql-yoga"
-import SchemaBuilder from "@pothos/core"
 
-const builder = new SchemaBuilder({})
+// Side effect imports to register types
+import "@/lib/server/graphql/fare"
 
-builder.queryType({
-  fields: t => ({
-    hello: t.string({
-      args: {
-        name: t.arg.string(),
-      },
-      resolve: (parent, { name }) => `hello, ${name || "World"}`,
-    }),
-  }),
-})
+import { builder } from "@/lib/server/graphql/schema-builder"
 
 const { handleRequest } = createYoga({
   schema: builder.toSchema(),
