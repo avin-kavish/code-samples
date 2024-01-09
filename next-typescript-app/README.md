@@ -5,10 +5,10 @@
 - ORM/Database - `src/lib/server/db/...`
 - Validation Schema - `src/lib/schema.ts`
 - Reusable Components - `src/components/...`
+- GraphQL API - `src/app/api/v1/graphql`
 
 ## Roadmap
 
-- [ ] GraphQL API
 - [ ] tRPC API
 - [ ] Client-side state management - Redux/Zustand
 - [ ] UI tests
