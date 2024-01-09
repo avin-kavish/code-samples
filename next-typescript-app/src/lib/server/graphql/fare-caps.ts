@@ -1,4 +1,4 @@
-import { builder } from "@/lib/server/graphql/schema-builder"
+import { builder } from "./schema-builder"
 import { FareCap } from "@prisma/client"
 import { listFareCaps } from "@/lib/server/db/fare-caps"
 
