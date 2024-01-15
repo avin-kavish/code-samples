@@ -3,11 +3,13 @@ import { TripCreateSchema } from "@/lib/schema"
 
 interface ListArgs {
   expand?: string[]
+  customerId?: bigint
 }
 
 export function listTrips(args: ListArgs = {}) {
   return prisma.trip.findMany({
     include: { customer: args.expand?.includes("customer") },
+    where: { customerId: args.customerId },
     orderBy: { date: "desc" },
   })
 }

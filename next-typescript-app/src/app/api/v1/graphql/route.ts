@@ -1,10 +1,11 @@
 import { createYoga } from "graphql-yoga"
+import { builder } from "@/lib/server/graphql/schema-builder"
 
 // Side effect imports to register types
 import "@/lib/server/graphql/fare"
 import "@/lib/server/graphql/fare-caps"
-
-import { builder } from "@/lib/server/graphql/schema-builder"
+import "@/lib/server/graphql/trips"
+import "@/lib/server/graphql/customers"
 
 const { handleRequest } = createYoga({
   schema: builder.toSchema(),

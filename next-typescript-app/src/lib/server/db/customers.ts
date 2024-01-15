@@ -9,6 +9,10 @@ export function createCustomer(data: CustomerCreateSchema) {
   return prisma.customer.create({ data })
 }
 
+export function getCustomer(id: bigint) {
+  return prisma.customer.findUniqueOrThrow({ where: { id } })
+}
+
 export function updateCustomer(id: number, data: CustomerCreateSchema) {
   return prisma.customer.update({ where: { id }, data })
 }

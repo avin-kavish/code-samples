@@ -6,7 +6,7 @@ import { FareCreateSchema } from "@/lib/schema"
 const FareType = builder.objectRef<Fare>("Fare")
 
 builder.objectType(FareType, {
-  description: "Pay the fare!",
+  description: "The cost of traveling from one line to another",
   fields: t => ({
     id: t.id({ resolve: v => String(v.id) }),
     from: t.exposeString("from"),
