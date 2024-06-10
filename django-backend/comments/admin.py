@@ -1,3 +1,11 @@
 from django.contrib import admin
 
-# Register your models here.
+from comments.models import Comment
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ["article", "summary", "creator", "created_at"]
+
+    def summary(self, obj):
+        return obj.text[0:20] + '...'

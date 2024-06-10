@@ -6,7 +6,7 @@ class Comment(models.Model):
 
     article = models.ForeignKey('articles.Article', on_delete=models.CASCADE)
 
-    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
+    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     creator = models.ForeignKey('users.User', on_delete=models.CASCADE)
 
