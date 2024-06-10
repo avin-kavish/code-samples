@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
+
 from users.models import User
 
 
@@ -7,7 +9,7 @@ class Article(models.Model):
     slug = models.CharField(max_length=1000)
     content = models.TextField()
     is_draft = models.BooleanField(default=True)
-    tags = models.TextField(array=True)
+    tags = ArrayField(models.CharField(max_length=100))
 
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
