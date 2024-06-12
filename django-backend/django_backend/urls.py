@@ -16,8 +16,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+
+import articles.views
+import comments.views
+import users.views
+
+router = routers.DefaultRouter()
+router.register(r'articles', articles.views.ArticleViewSet)
+router.register(r'comments', comments.views.CommentViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/auth/', include('rest_framework.urls'))
+    path('api/auth/', include('rest_framework.urls')),
+    path(
+        'api/v1/users/<int:pk>', users.views.UserDetail.as_view(),
+        name='user-detail'
+        ),
+    path(
+        'api/v1/users', users.views.UserList.as_view(),
+        name='user-read-create'
+        ),
+    path('api/v1/', include(router.urls))
 ]
