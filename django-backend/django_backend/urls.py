@@ -22,20 +22,13 @@ import articles.views
 import comments.views
 import users.views
 
-router = routers.DefaultRouter()
+router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'articles', articles.views.ArticleViewSet)
 router.register(r'comments', comments.views.CommentViewSet)
+router.register(r'users', users.views.UserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('rest_framework.urls')),
-    path(
-        'api/v1/users/<int:pk>', users.views.UserDetail.as_view(),
-        name='user-detail'
-        ),
-    path(
-        'api/v1/users', users.views.UserList.as_view(),
-        name='user-read-create'
-        ),
     path('api/v1/', include(router.urls))
 ]

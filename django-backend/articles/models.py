@@ -6,7 +6,7 @@ from users.models import User
 
 class Article(models.Model):
     title = models.CharField(max_length=1000)
-    slug = models.CharField(max_length=1000)
+    slug = models.CharField(max_length=1000, unique=True)
     content = models.TextField()
     is_draft = models.BooleanField(default=True)
     tags = ArrayField(models.CharField(max_length=100))
